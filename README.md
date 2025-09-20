@@ -170,6 +170,3 @@ This project is developed as part of a Python Development Challenge (PDC) and se
 
 **Assessment Submission Repository as Python Development Challenge BreadWinner** - A secure, modern web application showcasing OAuth integration and algorithmic pattern generation.
 
-[5](https://docs.replit.com/additional-resources/google-auth-in-flask)
-[6](https://dev.to/revisepdf/how-i-implemented-google-oauth-in-my-flask-application-with-supabase-6ke)
-[7](https://stackoverflow.com/questions/9499286/using-google-oauth2-with-flask)
