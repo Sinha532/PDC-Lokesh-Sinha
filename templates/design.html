@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printing Design - Pattern Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 2rem 1rem;
+        }
+        
+        .design-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        /* Sign out button in top right corner */
+        .sign-out-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        
+        .sign-out-link {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .sign-out-link:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .user-welcome {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Alternative: Sign out button inside user welcome box */
+        .user-welcome .sign-out-alt {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        
+        .user-welcome .sign-out-alt:hover {
+            background: rgba(255,255,255,0.1);
+            text-decoration: underline;
+        }
+        
+        .options-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.3s ease;
+        }
+        
+        .input-field:focus {
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-primary:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            min-height: 200px;
+        }
+        
+        .output-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .pattern-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            line-height: 1.2;
+        }
+        
+        .pattern-output::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .pattern-output::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        
+        .pattern-output::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+        
+        .loading {
+            color: #ffd700;
+        }
+        
+        .error {
+            color: #ff6b6b;
+        }
+        
+        @media (max-width: 600px) {
+            .design-container {
+                padding: 1.5rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .sign-out-container {
+                position: static;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="design-container">
+        <div class="header">
+            <!-- Sign out button in top right corner -->
+            <div class="sign-out-container">
+                <a href="{{ url_for('logout') }}" class="sign-out-link">Sign out</a>
+            </div>
+            
+            <h1 class="title">Printing Design</h1>
+            <p class="subtitle">Pattern Generator Tool</p>
+        </div>
+        
+        
+        
+        <div class="options-section">
+            <h2 class="section-title">Enter Your Option</h2>
+            
+            <div class="input-group">
+                <label for="numLines" class="input-label">Number of Lines (Maximum: 100)</label>
+                <input type="number" id="numLines" class="input-field" min="1" max="100" value="21" placeholder="Enter number of lines">
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="generatePatternFromBackend()" id="displayBtn">Display Pattern</button>
+                <button class="btn btn-primary" onclick="printToConsole()" id="consoleBtn">Print to Console</button>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <h3 class="output-title">Pattern Output</h3>
+            <div id="patternOutput" class="pattern-output">
+                Click "Display Pattern" or "Print to Console" to generate the design pattern.
+                
+Pattern examples:
+• For 21 lines: Creates "FORMULAQSOLUTIONS" pattern
+• For 16 lines: Creates "S" pattern  
+• Pattern adapts based on the number of lines entered
+
+Backend processing with FORMULAQSOLUTIONS algorithm.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generatePatternFromBackend() {
+            const numLines = parseInt(document.getElementById('numLines').value);
+            const outputDiv = document.getElementById('patternOutput');
+            const displayBtn = document.getElementById('displayBtn');
+            const consoleBtn = document.getElementById('consoleBtn');
+            
+            if (!numLines || numLines < 1 || numLines > 100) {
+                outputDiv.textContent = 'Please enter a valid number between 1 and 100.';
+                outputDiv.className = 'pattern-output error';
+                return;
+            }
+            
+            // Disable buttons and show loading
+            displayBtn.disabled = true;
+            consoleBtn.disabled = true;
+            outputDiv.textContent = 'Generating pattern from backend...';
+            outputDiv.className = 'pattern-output loading';
+            
+            try {
+                const response = await fetch('/generate-pattern', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ lines: numLines })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const output = `Input: Enter the number of lines for the design: ${result.input}
+Output:
+${result.pattern}
+
+Total lines generated: ${result.total_lines}
+Generated using FORMULAQSOLUTIONS as base name.`;
+                    
+                    outputDiv.textContent = output;
+                    outputDiv.className = 'pattern-output';
+                } else {
+                    outputDiv.textContent = `Error: ${result.error}`;
+                    outputDiv.className = 'pattern-output error';
+                }
+            } catch (error) {
+                outputDiv.textContent = `Network Error: ${error.message}`;
+                outputDiv.className = 'pattern-output error';
+            } finally {
+                // Re-enable buttons
+                displayBtn.disabled = false;
+                consoleBtn.disabled = false;
+            }
+        }
+        
+        async function printToConsole() {
+            const numLines = parseInt(document.getElementById('numLines').value);
+            const outputDiv = document.getElementById('patternOutput');
+            
+            if (!numLines || numLines < 1 || numLines > 100) {
+                console.log('Please enter a valid number between 1 and 100.');
+                outputDiv.textContent = 'Check console - Invalid input message logged.';
+                outputDiv.className = 'pattern-output error';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/generate-pattern', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ lines: numLines })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const output = `Input: Enter the number of lines for the design: ${result.input}
+Output:
+${result.pattern}`;
+                    
+                    console.log(output);
+                    outputDiv.textContent = 'Pattern printed to console! Check browser developer tools (F12) -> Console tab.';
+                    outputDiv.className = 'pattern-output';
+                } else {
+                    console.log(`Error: ${result.error}`);
+                    outputDiv.textContent = 'Check console - Error message logged.';
+                    outputDiv.className = 'pattern-output error';
+                }
+            } catch (error) {
+                console.log(`Network Error: ${error.message}`);
+                outputDiv.textContent = 'Check console - Network error logged.';
+                outputDiv.className = 'pattern-output error';
+            }
+        }
+        
+        // Generate default pattern on page load
+        window.onload = function() {
+            generatePatternFromBackend();
+        };
+    </script>
+</body>
+</html>
